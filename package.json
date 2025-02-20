@@ -1,0 +1,39 @@
+{
+	"name": "@gurafu/open-weather-map-types",
+	"version": "0.0.6",
+	"main": "",
+	"files": [
+		"./*.d.ts",
+		"./*.json",
+		"./*.js"
+	],
+	"keywords": [
+		"typescript",
+		"graphql",
+		"openweathermap",
+		"weather",
+		"types",
+		"introspection",
+		"jsdoc"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/gurafu-docs/open-weather-map-types.git"
+	},
+	"bugs": {
+		"url": "https://github.com/gurafu-docs/open-weather-map-types/issues"
+	},
+	"homepage": "https://github.com/gurafu-docs/open-weather-map-types",
+	"publishConfig": {
+		"access": "public"
+	},
+	"author": "gurafu",
+	"license": "ISC",
+	"types": "./graphql.d.ts",
+	"description": "Type definitions for Open Weather Map GraphQL Proxy",
+	"scripts": {
+		"patch": "npm version patch",
+		"minor": "npm version minor",
+		"major": "npm version major"
+	}
+}
