@@ -33,12 +33,7 @@ export type Api = {
   forecast: Forecast;
   /** Provides access to geocoding-related queries. */
   geocoding: Geocoding;
-  /**
-   * Retrieves road risk information based on location and time.
-   * This helps assess potential hazards such as slippery roads, fog, or other
-   * weather-related risks that may affect driving conditions.
-   */
-  roadRisk: Array<RoadRisk>;
+  oneCall: OneCall;
   /** The trigger query allows you to fetch triggers and historical data related to weather conditions. */
   trigger?: Maybe<TriggerQuery>;
 };
@@ -47,11 +42,6 @@ export type Api = {
 export type ApiCurrentArgs = {
   input: LatLonInput;
   options?: InputMaybe<CurrentOptions>;
-};
-
-
-export type ApiRoadRiskArgs = {
-  input: RoadRiskInput;
 };
 
 /** Provides air pollution data, including current, forecasted, and historical values. */
@@ -97,9 +87,9 @@ export type AirPollutionHistoryInput = {
   /** End timestamp in Unix format (UTC) for historical data retrieval. */
   end: Scalars['Int']['input'];
   /** Latitude coordinate of the location. */
-  lat: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
   /** Longitude coordinate of the location. */
-  lon: Scalars['String']['input'];
+  lon: Scalars['Float']['input'];
   /** Start timestamp in Unix format (UTC) for historical data retrieval. */
   start: Scalars['Int']['input'];
 };
@@ -162,6 +152,11 @@ export type City = {
   sunset: Scalars['Int']['output'];
   /** The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time). */
   timezone: Scalars['Int']['output'];
+};
+
+export type CloudCover = {
+  __typename?: 'CloudCover';
+  afternoon?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Clouds = {
@@ -254,6 +249,54 @@ export type Current = {
   wind?: Maybe<Wind>;
 };
 
+export type CurrentAndForecast = {
+  __typename?: 'CurrentAndForecast';
+  alerts?: Maybe<Array<WeatherAlert>>;
+  current?: Maybe<CurrentWeather>;
+  daily?: Maybe<Array<DailyForecast>>;
+  hourly?: Maybe<Array<CurrentAndForecastHourlyForecast>>;
+  lat: Scalars['Float']['output'];
+  lon: Scalars['Float']['output'];
+  minutely?: Maybe<Array<MinutelyForecast>>;
+  timezone: Scalars['String']['output'];
+  timezone_offset: Scalars['Int']['output'];
+};
+
+export type CurrentAndForecastHourlyForecast = {
+  __typename?: 'CurrentAndForecastHourlyForecast';
+  clouds: Scalars['Int']['output'];
+  dew_point: Scalars['Float']['output'];
+  dt: Scalars['Int']['output'];
+  feels_like: Scalars['Float']['output'];
+  humidity: Scalars['Int']['output'];
+  pop: Scalars['Float']['output'];
+  pressure: Scalars['Int']['output'];
+  rain?: Maybe<CurrentAndForecastRain>;
+  snow?: Maybe<CurrentAndForecastSnow>;
+  temp: Scalars['Float']['output'];
+  uvi: Scalars['Float']['output'];
+  visibility: Scalars['Int']['output'];
+  weather: Array<WeatherCondition>;
+  wind_deg: Scalars['Int']['output'];
+  wind_gust?: Maybe<Scalars['Float']['output']>;
+  wind_speed: Scalars['Float']['output'];
+};
+
+export type CurrentAndForecastOptions = {
+  lang?: InputMaybe<LangInput>;
+  units?: InputMaybe<Units>;
+};
+
+export type CurrentAndForecastRain = {
+  __typename?: 'CurrentAndForecastRain';
+  one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
+export type CurrentAndForecastSnow = {
+  __typename?: 'CurrentAndForecastSnow';
+  one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
 export type CurrentOptions = {
   /** The language in which the weather data should be returned (e.g., "en" for English, "fr" for French). */
   lang?: InputMaybe<LangInput>;
@@ -271,6 +314,101 @@ export type CurrentSnow = {
   __typename?: 'CurrentSnow';
   /** The amount of snowfall over the last hour, measured in millimeters. */
   one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
+export type CurrentWeather = {
+  __typename?: 'CurrentWeather';
+  clouds: Scalars['Int']['output'];
+  dew_point: Scalars['Float']['output'];
+  dt: Scalars['Int']['output'];
+  feels_like: Scalars['Float']['output'];
+  humidity: Scalars['Int']['output'];
+  pressure: Scalars['Int']['output'];
+  rain?: Maybe<CurrentAndForecastRain>;
+  snow?: Maybe<CurrentAndForecastSnow>;
+  sunrise?: Maybe<Scalars['Int']['output']>;
+  sunset?: Maybe<Scalars['Int']['output']>;
+  temp: Scalars['Float']['output'];
+  uvi: Scalars['Float']['output'];
+  visibility: Scalars['Int']['output'];
+  weather: Array<WeatherCondition>;
+  wind_deg: Scalars['Int']['output'];
+  wind_gust?: Maybe<Scalars['Float']['output']>;
+  wind_speed: Scalars['Float']['output'];
+};
+
+export type DailyForecast = {
+  __typename?: 'DailyForecast';
+  clouds: Scalars['Int']['output'];
+  dew_point: Scalars['Float']['output'];
+  dt: Scalars['Int']['output'];
+  feels_like: DailyTemperature;
+  humidity: Scalars['Int']['output'];
+  moon_phase: Scalars['Float']['output'];
+  moonrise: Scalars['Int']['output'];
+  moonset?: Maybe<Scalars['Int']['output']>;
+  pop: Scalars['Float']['output'];
+  pressure: Scalars['Int']['output'];
+  rain?: Maybe<Scalars['Float']['output']>;
+  snow?: Maybe<Scalars['Float']['output']>;
+  summary?: Maybe<Scalars['String']['output']>;
+  sunrise: Scalars['Int']['output'];
+  sunset: Scalars['Int']['output'];
+  temp: DailyTemperature;
+  uvi: Scalars['Float']['output'];
+  weather: Array<WeatherCondition>;
+  wind_deg: Scalars['Int']['output'];
+  wind_gust?: Maybe<Scalars['Float']['output']>;
+  wind_speed: Scalars['Float']['output'];
+};
+
+export type DailyTemperature = {
+  __typename?: 'DailyTemperature';
+  day?: Maybe<Scalars['Float']['output']>;
+  eve?: Maybe<Scalars['Float']['output']>;
+  max?: Maybe<Scalars['Float']['output']>;
+  min?: Maybe<Scalars['Float']['output']>;
+  morn?: Maybe<Scalars['Float']['output']>;
+  night?: Maybe<Scalars['Float']['output']>;
+};
+
+export type Data = {
+  __typename?: 'Data';
+  clouds?: Maybe<Scalars['Int']['output']>;
+  dew_point?: Maybe<Scalars['Float']['output']>;
+  dt?: Maybe<Scalars['Int']['output']>;
+  feels_like?: Maybe<Scalars['Float']['output']>;
+  humidity?: Maybe<Scalars['Int']['output']>;
+  pressure?: Maybe<Scalars['Int']['output']>;
+  sunrise?: Maybe<Scalars['Int']['output']>;
+  sunset?: Maybe<Scalars['Int']['output']>;
+  temp?: Maybe<Scalars['Float']['output']>;
+  uvi?: Maybe<Scalars['Float']['output']>;
+  visibility?: Maybe<Scalars['Int']['output']>;
+  weather: Array<Weather>;
+  wind_deg?: Maybe<Scalars['Int']['output']>;
+  wind_speed?: Maybe<Scalars['Float']['output']>;
+};
+
+export type DaySummary = {
+  __typename?: 'DaySummary';
+  cloud_cover?: Maybe<CloudCover>;
+  date?: Maybe<Scalars['String']['output']>;
+  humidity?: Maybe<Humidity>;
+  lat?: Maybe<Scalars['Float']['output']>;
+  lon?: Maybe<Scalars['Float']['output']>;
+  precipitation?: Maybe<Precipitation>;
+  pressure?: Maybe<Pressure>;
+  temperature?: Maybe<Temperature>;
+  tz?: Maybe<Scalars['String']['output']>;
+  units?: Maybe<Scalars['String']['output']>;
+  wind?: Maybe<Wind>;
+};
+
+export type DaySummaryInput = {
+  date: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
+  lon: Scalars['Float']['input'];
 };
 
 /** Represents location details retrieved using a direct search query. */
@@ -461,13 +599,13 @@ export type Forecast5Sys = {
 export type Forecast16 = {
   __typename?: 'Forecast16';
   /** Details about the city for which the forecast is provided. */
-  city?: Maybe<City>;
+  city?: Maybe<ForecastCity>;
   /** Number of forecast days returned in the response. */
   cnt?: Maybe<Scalars['Int']['output']>;
   /** Response code from the API (e.g., "200" for success). */
   cod?: Maybe<Scalars['String']['output']>;
   /** List of daily forecasts for up to 16 days. */
-  list?: Maybe<Array<Maybe<Forecast16List>>>;
+  list?: Maybe<Array<Forecast16List>>;
   /** Additional API response message or error description. */
   message?: Maybe<Scalars['Float']['output']>;
 };
@@ -527,16 +665,34 @@ export type Forecast16Options = {
 export type Forecast30 = {
   __typename?: 'Forecast30';
   /** Details about the city for which the forecast is provided. */
-  city?: Maybe<City>;
+  city?: Maybe<ForecastCity>;
+  /** Number of forecast days returned in the response. */
+  cnt?: Maybe<Scalars['Int']['output']>;
   /** Response code from the API (e.g., "200" for success). */
-  cod?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['String']['output']>;
   /**
    * List of daily forecasts for up to 30 days.
    * Each entry contains temperature, weather conditions, and other atmospheric details.
    */
-  list?: Maybe<Array<Maybe<Forecast16List>>>;
+  list?: Maybe<Array<Forecast30List>>;
   /** Additional API response message or error description. */
   message?: Maybe<Scalars['Float']['output']>;
+};
+
+export type Forecast30List = {
+  __typename?: 'Forecast30List';
+  clouds?: Maybe<Scalars['Int']['output']>;
+  deg?: Maybe<Scalars['Int']['output']>;
+  dt: Scalars['Int']['output'];
+  feels_like?: Maybe<FeelsLike>;
+  humidity?: Maybe<Scalars['Int']['output']>;
+  pressure?: Maybe<Scalars['Int']['output']>;
+  rain?: Maybe<Scalars['Float']['output']>;
+  speed?: Maybe<Scalars['Float']['output']>;
+  sunrise?: Maybe<Scalars['Int']['output']>;
+  sunset?: Maybe<Scalars['Int']['output']>;
+  temp?: Maybe<Temp>;
+  weather?: Maybe<Array<Weather>>;
 };
 
 /** Options for customizing the 30-day weather forecast request. */
@@ -553,6 +709,28 @@ export type Forecast30Options = {
    * Example: "metric" (Celsius, m/s) or "imperial" (Fahrenheit, mph).
    */
   units?: InputMaybe<Units>;
+};
+
+export type ForecastCity = {
+  __typename?: 'ForecastCity';
+  /** Coordinates of the city (latitude and longitude). */
+  coord: Coord;
+  /** City country code (e.g., "US" for the United States, "IN" for India). */
+  country: Scalars['String']['output'];
+  /**
+   * Unique city identifier.
+   * @deprecated Please note that built-in geocoder functionality has been deprecated.
+   */
+  id?: Maybe<Scalars['Int']['output']>;
+  /**
+   * City name (e.g., "London").
+   * @deprecated Please note that built-in geocoder functionality has been deprecated.
+   */
+  name?: Maybe<Scalars['String']['output']>;
+  /** City population (the number of people living in the city). */
+  population: Scalars['Int']['output'];
+  /** The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time). */
+  timezone: Scalars['Int']['output'];
 };
 
 /** Provides geocoding services, including direct, reverse, and ZIP code-based lookups. */
@@ -647,7 +825,7 @@ export type HourlyForecast = {
   /** Response code from the API (e.g., "200" for success). */
   cod?: Maybe<Scalars['String']['output']>;
   /** List of hourly forecast data, including temperature, weather conditions, and atmospheric details. */
-  list?: Maybe<Array<Maybe<Forecast5List>>>;
+  list?: Maybe<Array<Forecast5List>>;
   /** Additional API response message or error description. */
   message?: Maybe<Scalars['Int']['output']>;
 };
@@ -666,6 +844,11 @@ export type HourlyForecastOptions = {
    * Example: "metric" (Celsius, m/s) or "imperial" (Fahrenheit, mph).
    */
   units?: InputMaybe<Units>;
+};
+
+export type Humidity = {
+  __typename?: 'Humidity';
+  afternoon?: Maybe<Scalars['Float']['output']>;
 };
 
 export type IArea = {
@@ -728,9 +911,9 @@ export enum LangInput {
 
 export type LatLonInput = {
   /** Latitude coordinate (e.g., "34.0522"). */
-  lat: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
   /** Longitude coordinate (e.g., "-118.2437"). */
-  lon: Scalars['String']['input'];
+  lon: Scalars['Float']['input'];
 };
 
 /**
@@ -919,6 +1102,18 @@ export type Main = {
   temp_min?: Maybe<Scalars['Float']['output']>;
 };
 
+export type Max = {
+  __typename?: 'Max';
+  direction?: Maybe<Scalars['Float']['output']>;
+  speed?: Maybe<Scalars['Float']['output']>;
+};
+
+export type MinutelyForecast = {
+  __typename?: 'MinutelyForecast';
+  dt: Scalars['Int']['output'];
+  precipitation: Scalars['Float']['output'];
+};
+
 export type MultiPoint = IArea & {
   __typename?: 'MultiPoint';
   /** Represents a multi-point area. A set of multiple points in 2D space. */
@@ -956,6 +1151,58 @@ export type MutationApi = {
   trigger?: Maybe<TriggerMutation>;
 };
 
+export type OneCall = {
+  __typename?: 'OneCall';
+  currentAndForecast: CurrentAndForecast;
+  daySummary: DaySummary;
+  overview: Overview;
+  timeMachine: TimeMachine;
+};
+
+
+export type OneCallCurrentAndForecastArgs = {
+  input: LatLonInput;
+  options?: InputMaybe<OneCallOptions>;
+};
+
+
+export type OneCallDaySummaryArgs = {
+  input: DaySummaryInput;
+  options?: InputMaybe<OneCallOptions>;
+};
+
+
+export type OneCallOverviewArgs = {
+  input: LatLonInput;
+  options?: InputMaybe<OverviewOptions>;
+};
+
+
+export type OneCallTimeMachineArgs = {
+  input: TimeMachineInput;
+  options?: InputMaybe<OneCallOptions>;
+};
+
+export type OneCallOptions = {
+  lang?: InputMaybe<LangInput>;
+  units?: InputMaybe<Units>;
+};
+
+export type Overview = {
+  __typename?: 'Overview';
+  date?: Maybe<Scalars['String']['output']>;
+  lat: Scalars['Float']['output'];
+  lon: Scalars['Float']['output'];
+  tz?: Maybe<Scalars['String']['output']>;
+  units?: Maybe<Scalars['String']['output']>;
+  weather_overview?: Maybe<Scalars['String']['output']>;
+};
+
+export type OverviewOptions = {
+  date?: InputMaybe<Scalars['String']['input']>;
+  units?: InputMaybe<Units>;
+};
+
 export type Point = IArea & {
   __typename?: 'Point';
   /** Represents a point area. A single set of coordinates in 2D space (longitude, latitude). */
@@ -984,6 +1231,16 @@ export type PolygonWithHole = IArea & {
   /** The polygon with hole coordinates, represented as a 3D array with two sets of points: one for the outer polygon and one for the hole. */
   polygon_with_hole_coordinates?: Maybe<Array<Maybe<Array<Maybe<Array<Maybe<Scalars['Float']['output']>>>>>>>;
   type: TriggerType;
+};
+
+export type Precipitation = {
+  __typename?: 'Precipitation';
+  total?: Maybe<Scalars['Float']['output']>;
+};
+
+export type Pressure = {
+  __typename?: 'Pressure';
+  afternoon?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Query = {
@@ -1047,11 +1304,11 @@ export type Reverse = {
 /** Input parameters for reverse geocoding queries. */
 export type ReverseInput = {
   /** Latitude coordinate for the reverse geocoding lookup. */
-  lat: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
   /** Limit the number of results returned (default: no limit). */
   limit?: InputMaybe<Scalars['Int']['input']>;
   /** Longitude coordinate for the reverse geocoding lookup. */
-  lon: Scalars['String']['input'];
+  lon: Scalars['Float']['input'];
 };
 
 /** Represents the state and temperature of the road at a given location. */
@@ -1146,6 +1403,31 @@ export type Temp = {
   night?: Maybe<Scalars['Float']['output']>;
 };
 
+export type Temperature = {
+  __typename?: 'Temperature';
+  afternoon?: Maybe<Scalars['Float']['output']>;
+  evening?: Maybe<Scalars['Float']['output']>;
+  max?: Maybe<Scalars['Float']['output']>;
+  min?: Maybe<Scalars['Float']['output']>;
+  morning?: Maybe<Scalars['Float']['output']>;
+  night?: Maybe<Scalars['Float']['output']>;
+};
+
+export type TimeMachine = {
+  __typename?: 'TimeMachine';
+  data: Array<Data>;
+  lat: Scalars['Float']['output'];
+  lon: Scalars['Float']['output'];
+  timezone: Scalars['String']['output'];
+  timezone_offset: Scalars['Int']['output'];
+};
+
+export type TimeMachineInput = {
+  dt: Scalars['Int']['input'];
+  lat: Scalars['Float']['input'];
+  lon: Scalars['Float']['input'];
+};
+
 export type TimePeriod = {
   __typename?: 'TimePeriod';
   /** The end time period for the trigger, defined with a specific expression and amount. */
@@ -1168,9 +1450,9 @@ export type TrackInput = {
   /** Timestamp in Unix format (UTC) for which the road risk data is requested. */
   dt: Scalars['Int']['input'];
   /** Latitude coordinate of the location to assess. */
-  lat: Scalars['String']['input'];
+  lat: Scalars['Float']['input'];
   /** Longitude coordinate of the location to assess. */
-  lon: Scalars['String']['input'];
+  lon: Scalars['Float']['input'];
 };
 
 export type Trigger = {
@@ -1314,13 +1596,31 @@ export enum Units {
 export type Weather = {
   __typename?: 'Weather';
   /** Detailed description of the weather condition within the group. */
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   /** Icon identifier that represents the weather condition, used for fetching corresponding weather icons. */
   icon?: Maybe<Scalars['String']['output']>;
   /** Unique identifier for the weather condition (e.g., 200 for thunderstorm). */
-  id?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['Int']['output'];
   /** Group of weather parameters, such as Rain, Snow, Extreme, etc. */
-  main?: Maybe<Scalars['String']['output']>;
+  main: Scalars['String']['output'];
+};
+
+export type WeatherAlert = {
+  __typename?: 'WeatherAlert';
+  description: Scalars['String']['output'];
+  end: Scalars['Int']['output'];
+  event: Scalars['String']['output'];
+  sender_name: Scalars['String']['output'];
+  start: Scalars['Int']['output'];
+  tags: Array<Maybe<Scalars['String']['output']>>;
+};
+
+export type WeatherCondition = {
+  __typename?: 'WeatherCondition';
+  description: Scalars['String']['output'];
+  icon: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  main: Scalars['String']['output'];
 };
 
 export type Wind = {
@@ -1332,6 +1632,7 @@ export type Wind = {
    * Unit default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
    */
   gust?: Maybe<Scalars['Float']['output']>;
+  max?: Maybe<Max>;
   /**
    * Wind speed in the specified unit.
    * Unit default: meter/sec, Metric: meter/sec, Imperial: miles/hour.

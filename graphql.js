@@ -9,9 +9,7 @@
  * The response includes information about temperature, wind speed, weather conditions, and more.
  * @property {Forecast} forecast - Provides weather forecasts for up to 30 days.
  * @property {Geocoding} geocoding - Provides access to geocoding-related queries.
- * @property {Array<RoadRisk>} roadRisk - Retrieves road risk information based on location and time.
- * This helps assess potential hazards such as slippery roads, fog, or other
- * weather-related risks that may affect driving conditions.
+ * @property {OneCall} oneCall
  * @property {TriggerQuery} [trigger] - The trigger query allows you to fetch triggers and historical data related to weather conditions.
  */
 
@@ -30,8 +28,8 @@
  * Input parameters for retrieving historical air pollution data.
  * @typedef {Object} AirPollutionHistoryInput
  * @property {number} end - End timestamp in Unix format (UTC) for historical data retrieval.
- * @property {string} lat - Latitude coordinate of the location.
- * @property {string} lon - Longitude coordinate of the location.
+ * @property {number} lat - Latitude coordinate of the location.
+ * @property {number} lon - Longitude coordinate of the location.
  * @property {number} start - Start timestamp in Unix format (UTC) for historical data retrieval.
  */
 
@@ -71,6 +69,11 @@
  * @property {number} sunrise - The sunrise time in UTC (seconds since 1970-01-01).
  * @property {number} sunset - The sunset time in UTC (seconds since 1970-01-01).
  * @property {number} timezone - The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time).
+ */
+
+/**
+ * @typedef {Object} CloudCover
+ * @property {number} [afternoon]
  */
 
 /**
@@ -128,6 +131,55 @@
  */
 
 /**
+ * @typedef {Object} CurrentAndForecast
+ * @property {Array<WeatherAlert>} [alerts]
+ * @property {CurrentWeather} [current]
+ * @property {Array<DailyForecast>} [daily]
+ * @property {Array<CurrentAndForecastHourlyForecast>} [hourly]
+ * @property {number} lat
+ * @property {number} lon
+ * @property {Array<MinutelyForecast>} [minutely]
+ * @property {string} timezone
+ * @property {number} timezone_offset
+ */
+
+/**
+ * @typedef {Object} CurrentAndForecastHourlyForecast
+ * @property {number} clouds
+ * @property {number} dew_point
+ * @property {number} dt
+ * @property {number} feels_like
+ * @property {number} humidity
+ * @property {number} pop
+ * @property {number} pressure
+ * @property {CurrentAndForecastRain} [rain]
+ * @property {CurrentAndForecastSnow} [snow]
+ * @property {number} temp
+ * @property {number} uvi
+ * @property {number} visibility
+ * @property {Array<WeatherCondition>} weather
+ * @property {number} wind_deg
+ * @property {number} [wind_gust]
+ * @property {number} wind_speed
+ */
+
+/**
+ * @typedef {Object} CurrentAndForecastOptions
+ * @property {LangInput} [lang]
+ * @property {Units} [units]
+ */
+
+/**
+ * @typedef {Object} CurrentAndForecastRain
+ * @property {number} [one_hour]
+ */
+
+/**
+ * @typedef {Object} CurrentAndForecastSnow
+ * @property {number} [one_hour]
+ */
+
+/**
  * @typedef {Object} CurrentOptions
  * @property {LangInput} [lang] - The language in which the weather data should be returned (e.g., "en" for English, "fr" for French).
  * @property {Units} [units] - The unit system for the weather data. Can be "metric" (Celsius), "imperial" (Fahrenheit), or "standard" (Kelvin).
@@ -141,6 +193,102 @@
 /**
  * @typedef {Object} CurrentSnow
  * @property {number} [one_hour] - The amount of snowfall over the last hour, measured in millimeters.
+ */
+
+/**
+ * @typedef {Object} CurrentWeather
+ * @property {number} clouds
+ * @property {number} dew_point
+ * @property {number} dt
+ * @property {number} feels_like
+ * @property {number} humidity
+ * @property {number} pressure
+ * @property {CurrentAndForecastRain} [rain]
+ * @property {CurrentAndForecastSnow} [snow]
+ * @property {number} [sunrise]
+ * @property {number} [sunset]
+ * @property {number} temp
+ * @property {number} uvi
+ * @property {number} visibility
+ * @property {Array<WeatherCondition>} weather
+ * @property {number} wind_deg
+ * @property {number} [wind_gust]
+ * @property {number} wind_speed
+ */
+
+/**
+ * @typedef {Object} DailyForecast
+ * @property {number} clouds
+ * @property {number} dew_point
+ * @property {number} dt
+ * @property {DailyTemperature} feels_like
+ * @property {number} humidity
+ * @property {number} moon_phase
+ * @property {number} moonrise
+ * @property {number} [moonset]
+ * @property {number} pop
+ * @property {number} pressure
+ * @property {number} [rain]
+ * @property {number} [snow]
+ * @property {string} [summary]
+ * @property {number} sunrise
+ * @property {number} sunset
+ * @property {DailyTemperature} temp
+ * @property {number} uvi
+ * @property {Array<WeatherCondition>} weather
+ * @property {number} wind_deg
+ * @property {number} [wind_gust]
+ * @property {number} wind_speed
+ */
+
+/**
+ * @typedef {Object} DailyTemperature
+ * @property {number} [day]
+ * @property {number} [eve]
+ * @property {number} [max]
+ * @property {number} [min]
+ * @property {number} [morn]
+ * @property {number} [night]
+ */
+
+/**
+ * @typedef {Object} Data
+ * @property {number} [clouds]
+ * @property {number} [dew_point]
+ * @property {number} [dt]
+ * @property {number} [feels_like]
+ * @property {number} [humidity]
+ * @property {number} [pressure]
+ * @property {number} [sunrise]
+ * @property {number} [sunset]
+ * @property {number} [temp]
+ * @property {number} [uvi]
+ * @property {number} [visibility]
+ * @property {Array<Weather>} weather
+ * @property {number} [wind_deg]
+ * @property {number} [wind_speed]
+ */
+
+/**
+ * @typedef {Object} DaySummary
+ * @property {CloudCover} [cloud_cover]
+ * @property {string} [date]
+ * @property {Humidity} [humidity]
+ * @property {number} [lat]
+ * @property {number} [lon]
+ * @property {Precipitation} [precipitation]
+ * @property {Pressure} [pressure]
+ * @property {Temperature} [temperature]
+ * @property {string} [tz]
+ * @property {string} [units]
+ * @property {Wind} [wind]
+ */
+
+/**
+ * @typedef {Object} DaySummaryInput
+ * @property {string} date
+ * @property {number} lat
+ * @property {number} lon
  */
 
 /**
@@ -253,10 +401,10 @@
 /**
  * Represents the full 16-day weather forecast response.
  * @typedef {Object} Forecast16
- * @property {City} [city] - Details about the city for which the forecast is provided.
+ * @property {ForecastCity} [city] - Details about the city for which the forecast is provided.
  * @property {number} [cnt] - Number of forecast days returned in the response.
  * @property {string} [cod] - Response code from the API (e.g., "200" for success).
- * @property {Array<(Forecast16List|null|undefined)>} [list] - List of daily forecasts for up to 16 days.
+ * @property {Array<Forecast16List>} [list] - List of daily forecasts for up to 16 days.
  * @property {number} [message] - Additional API response message or error description.
  */
 
@@ -293,11 +441,28 @@
 /**
  * Represents the 30-day weather forecast response.
  * @typedef {Object} Forecast30
- * @property {City} [city] - Details about the city for which the forecast is provided.
- * @property {string} [cod] - Response code from the API (e.g., "200" for success).
- * @property {Array<(Forecast16List|null|undefined)>} [list] - List of daily forecasts for up to 30 days.
+ * @property {ForecastCity} [city] - Details about the city for which the forecast is provided.
+ * @property {number} [cnt] - Number of forecast days returned in the response.
+ * @property {string} [code] - Response code from the API (e.g., "200" for success).
+ * @property {Array<Forecast30List>} [list] - List of daily forecasts for up to 30 days.
  * Each entry contains temperature, weather conditions, and other atmospheric details.
  * @property {number} [message] - Additional API response message or error description.
+ */
+
+/**
+ * @typedef {Object} Forecast30List
+ * @property {number} [clouds]
+ * @property {number} [deg]
+ * @property {number} dt
+ * @property {FeelsLike} [feels_like]
+ * @property {number} [humidity]
+ * @property {number} [pressure]
+ * @property {number} [rain]
+ * @property {number} [speed]
+ * @property {number} [sunrise]
+ * @property {number} [sunset]
+ * @property {Temp} [temp]
+ * @property {Array<Weather>} [weather]
  */
 
 /**
@@ -308,6 +473,16 @@
  * Example: "en" for English, "es" for Spanish.
  * @property {Units} [units] - Unit format for temperature and wind speed.
  * Example: "metric" (Celsius, m/s) or "imperial" (Fahrenheit, mph).
+ */
+
+/**
+ * @typedef {Object} ForecastCity
+ * @property {Coord} coord - Coordinates of the city (latitude and longitude).
+ * @property {string} country - City country code (e.g., "US" for the United States, "IN" for India).
+ * @property {number} [id] - Unique city identifier. - DEPRECATED: Please note that built-in geocoder functionality has been deprecated.
+ * @property {string} [name] - City name (e.g., "London"). - DEPRECATED: Please note that built-in geocoder functionality has been deprecated.
+ * @property {number} population - City population (the number of people living in the city).
+ * @property {number} timezone - The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time).
  */
 
 /**
@@ -356,7 +531,7 @@
  * @property {City} [city] - Details about the city for which the forecast is provided.
  * @property {number} [cnt] - Number of forecasted hours returned in the response.
  * @property {string} [cod] - Response code from the API (e.g., "200" for success).
- * @property {Array<(Forecast5List|null|undefined)>} [list] - List of hourly forecast data, including temperature, weather conditions, and atmospheric details.
+ * @property {Array<Forecast5List>} [list] - List of hourly forecast data, including temperature, weather conditions, and atmospheric details.
  * @property {number} [message] - Additional API response message or error description.
  */
 
@@ -368,6 +543,11 @@
  * Example: "en" for English, "es" for Spanish.
  * @property {Units} [units] - Unit format for temperature and wind speed.
  * Example: "metric" (Celsius, m/s) or "imperial" (Fahrenheit, mph).
+ */
+
+/**
+ * @typedef {Object} Humidity
+ * @property {number} [afternoon]
  */
 
 /**
@@ -393,8 +573,8 @@
 
 /**
  * @typedef {Object} LatLonInput
- * @property {string} lat - Latitude coordinate (e.g., "34.0522").
- * @property {string} lon - Longitude coordinate (e.g., "-118.2437").
+ * @property {number} lat - Latitude coordinate (e.g., "34.0522").
+ * @property {number} lon - Longitude coordinate (e.g., "-118.2437").
  */
 
 /**
@@ -571,6 +751,18 @@
  */
 
 /**
+ * @typedef {Object} Max
+ * @property {number} [direction]
+ * @property {number} [speed]
+ */
+
+/**
+ * @typedef {Object} MinutelyForecast
+ * @property {number} dt
+ * @property {number} precipitation
+ */
+
+/**
  * @typedef {Object} MultiPoint
  * @property {string} _id - Represents a multi-point area. A set of multiple points in 2D space.
  * @property {JSON} coordinates
@@ -597,6 +789,36 @@
  */
 
 /**
+ * @typedef {Object} OneCall
+ * @property {CurrentAndForecast} currentAndForecast
+ * @property {DaySummary} daySummary
+ * @property {Overview} overview
+ * @property {TimeMachine} timeMachine
+ */
+
+/**
+ * @typedef {Object} OneCallOptions
+ * @property {LangInput} [lang]
+ * @property {Units} [units]
+ */
+
+/**
+ * @typedef {Object} Overview
+ * @property {string} [date]
+ * @property {number} lat
+ * @property {number} lon
+ * @property {string} [tz]
+ * @property {string} [units]
+ * @property {string} [weather_overview]
+ */
+
+/**
+ * @typedef {Object} OverviewOptions
+ * @property {string} [date]
+ * @property {Units} [units]
+ */
+
+/**
  * @typedef {Object} Point
  * @property {string} _id - Represents a point area. A single set of coordinates in 2D space (longitude, latitude).
  * @property {JSON} coordinates
@@ -618,6 +840,16 @@
  * @property {JSON} coordinates
  * @property {Array<(Array<(Array<(number|null|undefined)>|null|undefined)>|null|undefined)>} [polygon_with_hole_coordinates] - The polygon with hole coordinates, represented as a 3D array with two sets of points: one for the outer polygon and one for the hole.
  * @property {TriggerType} type
+ */
+
+/**
+ * @typedef {Object} Precipitation
+ * @property {number} [total]
+ */
+
+/**
+ * @typedef {Object} Pressure
+ * @property {number} [afternoon]
  */
 
 /**
@@ -659,9 +891,9 @@
 /**
  * Input parameters for reverse geocoding queries.
  * @typedef {Object} ReverseInput
- * @property {string} lat - Latitude coordinate for the reverse geocoding lookup.
+ * @property {number} lat - Latitude coordinate for the reverse geocoding lookup.
  * @property {number} [limit] - Limit the number of results returned (default: no limit).
- * @property {string} lon - Longitude coordinate for the reverse geocoding lookup.
+ * @property {number} lon - Longitude coordinate for the reverse geocoding lookup.
  */
 
 /**
@@ -727,6 +959,32 @@
  */
 
 /**
+ * @typedef {Object} Temperature
+ * @property {number} [afternoon]
+ * @property {number} [evening]
+ * @property {number} [max]
+ * @property {number} [min]
+ * @property {number} [morning]
+ * @property {number} [night]
+ */
+
+/**
+ * @typedef {Object} TimeMachine
+ * @property {Array<Data>} data
+ * @property {number} lat
+ * @property {number} lon
+ * @property {string} timezone
+ * @property {number} timezone_offset
+ */
+
+/**
+ * @typedef {Object} TimeMachineInput
+ * @property {number} dt
+ * @property {number} lat
+ * @property {number} lon
+ */
+
+/**
  * @typedef {Object} TimePeriod
  * @property {TriggersStartEnd} end - The end time period for the trigger, defined with a specific expression and amount.
  * @property {TriggersStartEnd} start - The start time period for the trigger, defined with a specific expression and amount.
@@ -740,8 +998,8 @@
  * Represents a track point containing latitude, longitude, and timestamp.
  * @typedef {Object} TrackInput
  * @property {number} dt - Timestamp in Unix format (UTC) for which the road risk data is requested.
- * @property {string} lat - Latitude coordinate of the location to assess.
- * @property {string} lon - Longitude coordinate of the location to assess.
+ * @property {number} lat - Latitude coordinate of the location to assess.
+ * @property {number} lon - Longitude coordinate of the location to assess.
  */
 
 /**
@@ -829,10 +1087,28 @@
 
 /**
  * @typedef {Object} Weather
- * @property {string} [description] - Detailed description of the weather condition within the group.
+ * @property {string} description - Detailed description of the weather condition within the group.
  * @property {string} [icon] - Icon identifier that represents the weather condition, used for fetching corresponding weather icons.
- * @property {number} [id] - Unique identifier for the weather condition (e.g., 200 for thunderstorm).
- * @property {string} [main] - Group of weather parameters, such as Rain, Snow, Extreme, etc.
+ * @property {number} id - Unique identifier for the weather condition (e.g., 200 for thunderstorm).
+ * @property {string} main - Group of weather parameters, such as Rain, Snow, Extreme, etc.
+ */
+
+/**
+ * @typedef {Object} WeatherAlert
+ * @property {string} description
+ * @property {number} end
+ * @property {string} event
+ * @property {string} sender_name
+ * @property {number} start
+ * @property {Array<(string|null|undefined)>} tags
+ */
+
+/**
+ * @typedef {Object} WeatherCondition
+ * @property {string} description
+ * @property {string} icon
+ * @property {number} id
+ * @property {string} main
  */
 
 /**
@@ -840,6 +1116,7 @@
  * @property {number} [deg] - Wind direction in degrees. A meteorological measurement where 0° is north, 90° is east, 180° is south, and 270° is west.
  * @property {number} [gust] - Wind gust speed in the specified unit.
  * Unit default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
+ * @property {Max} [max]
  * @property {number} [speed] - Wind speed in the specified unit.
  * Unit default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
  */
