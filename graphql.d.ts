@@ -1531,7 +1531,7 @@ export type TriggerQuery = {
   /** Fetch a specific trigger by its ID. */
   get?: Maybe<Trigger>;
   /** Fetch historical data related to triggers. */
-  history?: Maybe<HistoryQuery>;
+  history: HistoryQuery;
   /** Fetch a list of triggers based on the app ID. */
   list?: Maybe<Array<Maybe<Trigger>>>;
 };

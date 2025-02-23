@@ -1047,7 +1047,7 @@
 /**
  * @typedef {Object} TriggerQuery
  * @property {Trigger} [get] - Fetch a specific trigger by its ID.
- * @property {HistoryQuery} [history] - Fetch historical data related to triggers.
+ * @property {HistoryQuery} history - Fetch historical data related to triggers.
  * @property {Array<(Trigger|null|undefined)>} [list] - Fetch a list of triggers based on the app ID.
  */
 
