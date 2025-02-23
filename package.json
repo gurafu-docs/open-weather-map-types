@@ -1,6 +1,6 @@
 {
 	"name": "@gurafu/open-weather-map-types",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"main": "",
 	"files": [
 		"./*.d.ts",
