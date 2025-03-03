@@ -34,6 +34,12 @@ export type Api = {
   /** Provides access to geocoding-related queries. */
   geocoding: Geocoding;
   oneCall: OneCall;
+  /**
+   * Retrieves road risk information based on location and time.
+   * This helps assess potential hazards such as slippery roads, fog, or other
+   * weather-related risks that may affect driving conditions.
+   */
+  roadRisk?: Maybe<Array<RoadRisk>>;
   /** The trigger query allows you to fetch triggers and historical data related to weather conditions. */
   trigger?: Maybe<TriggerQuery>;
 };
@@ -42,6 +48,11 @@ export type Api = {
 export type ApiCurrentArgs = {
   input: LatLonInput;
   options?: InputMaybe<CurrentOptions>;
+};
+
+
+export type ApiRoadRiskArgs = {
+  input: RoadRiskInput;
 };
 
 /** Provides air pollution data, including current, forecasted, and historical values. */
@@ -210,9 +221,9 @@ export type Conditions = {
 export type Coord = {
   __typename?: 'Coord';
   /** City geographic location, expressed as latitude (y-axis). */
-  lat: Scalars['Float']['output'];
+  lat?: Maybe<Scalars['Float']['output']>;
   /** City geographic location, expressed as longitude (x-axis). */
-  lon: Scalars['Float']['output'];
+  lon?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Current = {
@@ -244,7 +255,7 @@ export type Current = {
   /** The visibility distance in meters. */
   visibility?: Maybe<Scalars['Int']['output']>;
   /** A list of weather conditions for the location, including weather type (e.g., clear, rainy, stormy). */
-  weather: Array<Weather>;
+  weather?: Maybe<Array<Weather>>;
   /** Wind data, including wind speed, direction, and gusts. */
   wind?: Maybe<Wind>;
 };
@@ -275,7 +286,7 @@ export type CurrentAndForecastHourlyForecast = {
   snow?: Maybe<CurrentAndForecastSnow>;
   temp: Scalars['Float']['output'];
   uvi: Scalars['Float']['output'];
-  visibility: Scalars['Int']['output'];
+  visibility?: Maybe<Scalars['Int']['output']>;
   weather: Array<WeatherCondition>;
   wind_deg: Scalars['Int']['output'];
   wind_gust?: Maybe<Scalars['Float']['output']>;
@@ -380,6 +391,8 @@ export type Data = {
   feels_like?: Maybe<Scalars['Float']['output']>;
   humidity?: Maybe<Scalars['Int']['output']>;
   pressure?: Maybe<Scalars['Int']['output']>;
+  rain?: Maybe<TimeMachineRain>;
+  snow?: Maybe<TimeMachineSnow>;
   sunrise?: Maybe<Scalars['Int']['output']>;
   sunset?: Maybe<Scalars['Int']['output']>;
   temp?: Maybe<Scalars['Float']['output']>;
@@ -393,10 +406,13 @@ export type Data = {
 export type DaySummary = {
   __typename?: 'DaySummary';
   cloud_cover?: Maybe<CloudCover>;
+  code?: Maybe<Scalars['String']['output']>;
   date?: Maybe<Scalars['String']['output']>;
   humidity?: Maybe<Humidity>;
   lat?: Maybe<Scalars['Float']['output']>;
   lon?: Maybe<Scalars['Float']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  parameters?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   precipitation?: Maybe<Precipitation>;
   pressure?: Maybe<Pressure>;
   temperature?: Maybe<Temperature>;
@@ -523,7 +539,7 @@ export type Forecast5List = {
   /** The perceived temperature (feels-like temperature). */
   feels_like?: Maybe<FeelsLike>;
   /** Represents a single forecast entry with weather details for a specific time. */
-  main: Forecast5Main;
+  main: Main;
   /** The probability of precipitation (0 to 1). */
   pop?: Maybe<Scalars['Float']['output']>;
   /** The forecasted rain volume. */
@@ -540,29 +556,6 @@ export type Forecast5List = {
   weather: Array<Weather>;
   /** Wind data, including wind speed, direction, and gusts. */
   wind?: Maybe<Wind>;
-};
-
-/** Represents the forecasted temperature for a specific time. */
-export type Forecast5Main = {
-  __typename?: 'Forecast5Main';
-  /** The "feels-like" temperature in degrees Celsius. */
-  feels_like?: Maybe<Scalars['Float']['output']>;
-  /** The atmospheric pressure at ground level in hPa. */
-  grnd_level?: Maybe<Scalars['Int']['output']>;
-  /** The humidity percentage. */
-  humidity?: Maybe<Scalars['Int']['output']>;
-  /** The atmospheric pressure in hPa. */
-  pressure?: Maybe<Scalars['Int']['output']>;
-  /** The atmospheric pressure at sea level in hPa. */
-  sea_level?: Maybe<Scalars['Int']['output']>;
-  /** The temperature in degrees Celsius. */
-  temp?: Maybe<Scalars['Float']['output']>;
-  /** The temperature coefficient. */
-  temp_kf?: Maybe<Scalars['Float']['output']>;
-  /** The maximum temperature in degrees Celsius. */
-  temp_max?: Maybe<Scalars['Float']['output']>;
-  /** The minimum temperature in degrees Celsius. */
-  temp_min?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Input parameters for fetching the 5-day weather forecast. */
@@ -688,6 +681,7 @@ export type Forecast30List = {
   humidity?: Maybe<Scalars['Int']['output']>;
   pressure?: Maybe<Scalars['Int']['output']>;
   rain?: Maybe<Scalars['Float']['output']>;
+  snow?: Maybe<Scalars['Float']['output']>;
   speed?: Maybe<Scalars['Float']['output']>;
   sunrise?: Maybe<Scalars['Int']['output']>;
   sunset?: Maybe<Scalars['Int']['output']>;
@@ -731,6 +725,54 @@ export type ForecastCity = {
   population: Scalars['Int']['output'];
   /** The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time). */
   timezone: Scalars['Int']['output'];
+};
+
+export type ForecastHourlyList = {
+  __typename?: 'ForecastHourlyList';
+  /** The cloudiness percentage. */
+  clouds?: Maybe<Clouds>;
+  /** The timestamp (Unix time) for the forecast entry. */
+  dt: Scalars['Int']['output'];
+  /** The date and time of the forecast entry. */
+  dt_txt?: Maybe<Scalars['String']['output']>;
+  /** The perceived temperature (feels-like temperature). */
+  feels_like?: Maybe<FeelsLike>;
+  /** Represents a single forecast entry with weather details for a specific time. */
+  main: Main;
+  /** The probability of precipitation (0 to 1). */
+  pop?: Maybe<Scalars['Float']['output']>;
+  /** The forecasted rain volume. */
+  rain?: Maybe<ForecastHourlyRain>;
+  /** The forecasted snow volume. */
+  snow?: Maybe<ForecastHourlySnow>;
+  /** Part of the day (n - night, d - day) */
+  sys?: Maybe<ForecastHourlySys>;
+  /** The actual temperature forecasted. */
+  temp?: Maybe<Temp>;
+  /** The visibility distance in meters. */
+  visibility?: Maybe<Scalars['Int']['output']>;
+  /** A list of weather conditions applicable to this forecast entry. */
+  weather: Array<Weather>;
+  /** Wind data, including wind speed, direction, and gusts. */
+  wind?: Maybe<Wind>;
+};
+
+export type ForecastHourlyRain = {
+  __typename?: 'ForecastHourlyRain';
+  /** The amount of rain in millimeters for a three-hour period. */
+  one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
+export type ForecastHourlySnow = {
+  __typename?: 'ForecastHourlySnow';
+  /** The amount of snow in millimeters for a three-hour period. */
+  one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
+export type ForecastHourlySys = {
+  __typename?: 'ForecastHourlySys';
+  /** Part of the day (n - night, d - day) */
+  pod?: Maybe<Scalars['String']['output']>;
 };
 
 /** Provides geocoding services, including direct, reverse, and ZIP code-based lookups. */
@@ -825,7 +867,7 @@ export type HourlyForecast = {
   /** Response code from the API (e.g., "200" for success). */
   cod?: Maybe<Scalars['String']['output']>;
   /** List of hourly forecast data, including temperature, weather conditions, and atmospheric details. */
-  list?: Maybe<Array<Forecast5List>>;
+  list?: Maybe<Array<ForecastHourlyList>>;
   /** Additional API response message or error description. */
   message?: Maybe<Scalars['Int']['output']>;
 };
@@ -1327,15 +1369,15 @@ export type Road = {
 export type RoadRisk = {
   __typename?: 'RoadRisk';
   /** List of alerts indicating potential hazards due to weather or road conditions. */
-  alerts: Array<RoadRiskAlert>;
+  alerts?: Maybe<Array<RoadRiskAlert>>;
   /** Coordinates (latitude, longitude) of the location for which the road risk data applies. */
-  coord: Array<Scalars['Float']['output']>;
+  coord?: Maybe<Array<Scalars['Float']['output']>>;
   /** Timestamp in Unix format (UTC) representing the time for which the data is provided. */
-  dt: Scalars['Int']['output'];
+  dt?: Maybe<Scalars['Int']['output']>;
   /** Information about the road state and surface temperature. */
   road?: Maybe<Road>;
   /** Weather conditions affecting road risk at the given location. */
-  weather: RoadRiskWeather;
+  weather?: Maybe<RoadRiskWeather>;
 };
 
 /** Represents an alert related to road risk conditions. */
@@ -1352,7 +1394,7 @@ export type RoadRiskAlert = {
 /** Input parameters for retrieving road risk data. */
 export type RoadRiskInput = {
   /** List of track points containing location coordinates and timestamps to assess road risk. */
-  tracks: Array<TrackInput>;
+  track: Array<TrackInput>;
 };
 
 /** Represents the weather conditions that impact road risk. */
@@ -1364,13 +1406,13 @@ export type RoadRiskWeather = {
    */
   dew_point?: Maybe<Scalars['Float']['output']>;
   /** Intensity of precipitation (rain or snow) in millimeters per hour (mm/h). */
-  precipitation_intensity: Scalars['Float']['output'];
+  precipitation_intensity?: Maybe<Scalars['Float']['output']>;
   /** Current air temperature in degrees Celsius. */
-  temp: Scalars['Float']['output'];
+  temp?: Maybe<Scalars['Float']['output']>;
   /** Wind direction in degrees, where 0° represents north, 90° east, 180° south, and 270° west. */
-  wind_deg: Scalars['Int']['output'];
+  wind_deg?: Maybe<Scalars['Int']['output']>;
   /** Wind speed at the given location, measured in meters per second (m/s). */
-  wind_speed: Scalars['Float']['output'];
+  wind_speed?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Sys = {
@@ -1426,6 +1468,16 @@ export type TimeMachineInput = {
   dt: Scalars['Int']['input'];
   lat: Scalars['Float']['input'];
   lon: Scalars['Float']['input'];
+};
+
+export type TimeMachineRain = {
+  __typename?: 'TimeMachineRain';
+  one_hour?: Maybe<Scalars['Float']['output']>;
+};
+
+export type TimeMachineSnow = {
+  __typename?: 'TimeMachineSnow';
+  one_hour?: Maybe<Scalars['Float']['output']>;
 };
 
 export type TimePeriod = {
@@ -1504,8 +1556,6 @@ export type TriggerMutation = {
   __typename?: 'TriggerMutation';
   /** Add a new trigger with the specified input data. */
   add?: Maybe<Trigger>;
-  /** Delete a trigger using the specified trigger ID. */
-  delete?: Maybe<Trigger>;
   /** Update an existing trigger using the provided trigger ID and new input data. */
   update?: Maybe<Trigger>;
 };
@@ -1516,14 +1566,9 @@ export type TriggerMutationAddArgs = {
 };
 
 
-export type TriggerMutationDeleteArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
 export type TriggerMutationUpdateArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  input?: InputMaybe<TriggerInput>;
+  id: Scalars['ID']['input'];
+  input: TriggerInput;
 };
 
 export type TriggerQuery = {

@@ -10,6 +10,9 @@
  * @property {Forecast} forecast - Provides weather forecasts for up to 30 days.
  * @property {Geocoding} geocoding - Provides access to geocoding-related queries.
  * @property {OneCall} oneCall
+ * @property {Array<RoadRisk>} [roadRisk] - Retrieves road risk information based on location and time.
+ * This helps assess potential hazards such as slippery roads, fog, or other
+ * weather-related risks that may affect driving conditions.
  * @property {TriggerQuery} [trigger] - The trigger query allows you to fetch triggers and historical data related to weather conditions.
  */
 
@@ -107,8 +110,8 @@
 
 /**
  * @typedef {Object} Coord
- * @property {number} lat - City geographic location, expressed as latitude (y-axis).
- * @property {number} lon - City geographic location, expressed as longitude (x-axis).
+ * @property {number} [lat] - City geographic location, expressed as latitude (y-axis).
+ * @property {number} [lon] - City geographic location, expressed as longitude (x-axis).
  */
 
 /**
@@ -126,7 +129,7 @@
  * @property {Sys} sys - The system information about the location, including sunrise and sunset times.
  * @property {number} timezone - The timezone offset in seconds from UTC.
  * @property {number} [visibility] - The visibility distance in meters.
- * @property {Array<Weather>} weather - A list of weather conditions for the location, including weather type (e.g., clear, rainy, stormy).
+ * @property {Array<Weather>} [weather] - A list of weather conditions for the location, including weather type (e.g., clear, rainy, stormy).
  * @property {Wind} [wind] - Wind data, including wind speed, direction, and gusts.
  */
 
@@ -156,7 +159,7 @@
  * @property {CurrentAndForecastSnow} [snow]
  * @property {number} temp
  * @property {number} uvi
- * @property {number} visibility
+ * @property {number} [visibility]
  * @property {Array<WeatherCondition>} weather
  * @property {number} wind_deg
  * @property {number} [wind_gust]
@@ -259,6 +262,8 @@
  * @property {number} [feels_like]
  * @property {number} [humidity]
  * @property {number} [pressure]
+ * @property {TimeMachineRain} [rain]
+ * @property {TimeMachineSnow} [snow]
  * @property {number} [sunrise]
  * @property {number} [sunset]
  * @property {number} [temp]
@@ -272,10 +277,13 @@
 /**
  * @typedef {Object} DaySummary
  * @property {CloudCover} [cloud_cover]
+ * @property {string} [code]
  * @property {string} [date]
  * @property {Humidity} [humidity]
  * @property {number} [lat]
  * @property {number} [lon]
+ * @property {string} [message]
+ * @property {Array<(string|null|undefined)>} [parameters]
  * @property {Precipitation} [precipitation]
  * @property {Pressure} [pressure]
  * @property {Temperature} [temperature]
@@ -348,7 +356,7 @@
  * @property {number} dt - The timestamp (Unix time) for the forecast entry.
  * @property {string} [dt_txt] - The date and time of the forecast entry.
  * @property {FeelsLike} [feels_like] - The perceived temperature (feels-like temperature).
- * @property {Forecast5Main} main - Represents a single forecast entry with weather details for a specific time.
+ * @property {Main} main - Represents a single forecast entry with weather details for a specific time.
  * @property {number} [pop] - The probability of precipitation (0 to 1).
  * @property {Forecast5Rain} [rain] - The forecasted rain volume.
  * @property {Forecast5Snow} [snow] - The forecasted snow volume.
@@ -357,20 +365,6 @@
  * @property {number} [visibility] - The visibility distance in meters.
  * @property {Array<Weather>} weather - A list of weather conditions applicable to this forecast entry.
  * @property {Wind} [wind] - Wind data, including wind speed, direction, and gusts.
- */
-
-/**
- * Represents the forecasted temperature for a specific time.
- * @typedef {Object} Forecast5Main
- * @property {number} [feels_like] - The "feels-like" temperature in degrees Celsius.
- * @property {number} [grnd_level] - The atmospheric pressure at ground level in hPa.
- * @property {number} [humidity] - The humidity percentage.
- * @property {number} [pressure] - The atmospheric pressure in hPa.
- * @property {number} [sea_level] - The atmospheric pressure at sea level in hPa.
- * @property {number} [temp] - The temperature in degrees Celsius.
- * @property {number} [temp_kf] - The temperature coefficient.
- * @property {number} [temp_max] - The maximum temperature in degrees Celsius.
- * @property {number} [temp_min] - The minimum temperature in degrees Celsius.
  */
 
 /**
@@ -458,6 +452,7 @@
  * @property {number} [humidity]
  * @property {number} [pressure]
  * @property {number} [rain]
+ * @property {number} [snow]
  * @property {number} [speed]
  * @property {number} [sunrise]
  * @property {number} [sunset]
@@ -483,6 +478,38 @@
  * @property {string} [name] - City name (e.g., "London"). - DEPRECATED: Please note that built-in geocoder functionality has been deprecated.
  * @property {number} population - City population (the number of people living in the city).
  * @property {number} timezone - The timezone of the city, in UTC offset (e.g., 0 for UTC, -5 for Eastern Standard Time).
+ */
+
+/**
+ * @typedef {Object} ForecastHourlyList
+ * @property {Clouds} [clouds] - The cloudiness percentage.
+ * @property {number} dt - The timestamp (Unix time) for the forecast entry.
+ * @property {string} [dt_txt] - The date and time of the forecast entry.
+ * @property {FeelsLike} [feels_like] - The perceived temperature (feels-like temperature).
+ * @property {Main} main - Represents a single forecast entry with weather details for a specific time.
+ * @property {number} [pop] - The probability of precipitation (0 to 1).
+ * @property {ForecastHourlyRain} [rain] - The forecasted rain volume.
+ * @property {ForecastHourlySnow} [snow] - The forecasted snow volume.
+ * @property {ForecastHourlySys} [sys] - Part of the day (n - night, d - day)
+ * @property {Temp} [temp] - The actual temperature forecasted.
+ * @property {number} [visibility] - The visibility distance in meters.
+ * @property {Array<Weather>} weather - A list of weather conditions applicable to this forecast entry.
+ * @property {Wind} [wind] - Wind data, including wind speed, direction, and gusts.
+ */
+
+/**
+ * @typedef {Object} ForecastHourlyRain
+ * @property {number} [one_hour] - The amount of rain in millimeters for a three-hour period.
+ */
+
+/**
+ * @typedef {Object} ForecastHourlySnow
+ * @property {number} [one_hour] - The amount of snow in millimeters for a three-hour period.
+ */
+
+/**
+ * @typedef {Object} ForecastHourlySys
+ * @property {string} [pod] - Part of the day (n - night, d - day)
  */
 
 /**
@@ -531,7 +558,7 @@
  * @property {City} [city] - Details about the city for which the forecast is provided.
  * @property {number} [cnt] - Number of forecasted hours returned in the response.
  * @property {string} [cod] - Response code from the API (e.g., "200" for success).
- * @property {Array<Forecast5List>} [list] - List of hourly forecast data, including temperature, weather conditions, and atmospheric details.
+ * @property {Array<ForecastHourlyList>} [list] - List of hourly forecast data, including temperature, weather conditions, and atmospheric details.
  * @property {number} [message] - Additional API response message or error description.
  */
 
@@ -907,11 +934,11 @@
 /**
  * Represents road risk data, including weather conditions, road state, and alerts.
  * @typedef {Object} RoadRisk
- * @property {Array<RoadRiskAlert>} alerts - List of alerts indicating potential hazards due to weather or road conditions.
- * @property {Array<number>} coord - Coordinates (latitude, longitude) of the location for which the road risk data applies.
- * @property {number} dt - Timestamp in Unix format (UTC) representing the time for which the data is provided.
+ * @property {Array<RoadRiskAlert>} [alerts] - List of alerts indicating potential hazards due to weather or road conditions.
+ * @property {Array<number>} [coord] - Coordinates (latitude, longitude) of the location for which the road risk data applies.
+ * @property {number} [dt] - Timestamp in Unix format (UTC) representing the time for which the data is provided.
  * @property {Road} [road] - Information about the road state and surface temperature.
- * @property {RoadRiskWeather} weather - Weather conditions affecting road risk at the given location.
+ * @property {RoadRiskWeather} [weather] - Weather conditions affecting road risk at the given location.
  */
 
 /**
@@ -925,7 +952,7 @@
 /**
  * Input parameters for retrieving road risk data.
  * @typedef {Object} RoadRiskInput
- * @property {Array<TrackInput>} tracks - List of track points containing location coordinates and timestamps to assess road risk.
+ * @property {Array<TrackInput>} track - List of track points containing location coordinates and timestamps to assess road risk.
  */
 
 /**
@@ -933,10 +960,10 @@
  * @typedef {Object} RoadRiskWeather
  * @property {number} [dew_point] - Dew point temperature in degrees Celsius, indicating the temperature at which air
  * becomes saturated with moisture and condensation begins.
- * @property {number} precipitation_intensity - Intensity of precipitation (rain or snow) in millimeters per hour (mm/h).
- * @property {number} temp - Current air temperature in degrees Celsius.
- * @property {number} wind_deg - Wind direction in degrees, where 0° represents north, 90° east, 180° south, and 270° west.
- * @property {number} wind_speed - Wind speed at the given location, measured in meters per second (m/s).
+ * @property {number} [precipitation_intensity] - Intensity of precipitation (rain or snow) in millimeters per hour (mm/h).
+ * @property {number} [temp] - Current air temperature in degrees Celsius.
+ * @property {number} [wind_deg] - Wind direction in degrees, where 0° represents north, 90° east, 180° south, and 270° west.
+ * @property {number} [wind_speed] - Wind speed at the given location, measured in meters per second (m/s).
  */
 
 /**
@@ -982,6 +1009,16 @@
  * @property {number} dt
  * @property {number} lat
  * @property {number} lon
+ */
+
+/**
+ * @typedef {Object} TimeMachineRain
+ * @property {number} [one_hour]
+ */
+
+/**
+ * @typedef {Object} TimeMachineSnow
+ * @property {number} [one_hour]
  */
 
 /**
@@ -1040,7 +1077,6 @@
 /**
  * @typedef {Object} TriggerMutation
  * @property {Trigger} [add] - Add a new trigger with the specified input data.
- * @property {Trigger} [delete] - Delete a trigger using the specified trigger ID.
  * @property {Trigger} [update] - Update an existing trigger using the provided trigger ID and new input data.
  */
 
