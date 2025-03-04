@@ -1043,6 +1043,7 @@ export type LocalNames = {
   km?: Maybe<Scalars['String']['output']>;
   kn?: Maybe<Scalars['String']['output']>;
   ko?: Maybe<Scalars['String']['output']>;
+  ks?: Maybe<Scalars['String']['output']>;
   ku?: Maybe<Scalars['String']['output']>;
   kv?: Maybe<Scalars['String']['output']>;
   kw?: Maybe<Scalars['String']['output']>;

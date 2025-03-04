@@ -685,6 +685,7 @@
  * @property {string} [km]
  * @property {string} [kn]
  * @property {string} [ko]
+ * @property {string} [ks]
  * @property {string} [ku]
  * @property {string} [kv]
  * @property {string} [kw]
