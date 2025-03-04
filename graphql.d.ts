@@ -812,32 +812,6 @@ export type Geometry = {
   type?: Maybe<Scalars['String']['output']>;
 };
 
-export type GurafuHeader = {
-  name: Scalars['String']['input'];
-  value: Scalars['String']['input'];
-};
-
-export enum GurafuPathMethod {
-  Delete = 'DELETE',
-  Get = 'GET',
-  Post = 'POST',
-  Put = 'PUT'
-}
-
-export enum GurafuPlan {
-  Basic = 'BASIC',
-  Mega = 'MEGA',
-  Pro = 'PRO',
-  Ultra = 'ULTRA'
-}
-
-export type GurafuResolverInput = {
-  /** The name of the interface or union type. */
-  abstractTypeName: Scalars['String']['input'];
-  /** The conditions to resolve the type. */
-  conditions: Array<UnionResolverCondition>;
-};
-
 export type HistoryQuery = {
   __typename?: 'HistoryQuery';
   /** Fetch a specific trigger history event using the trigger ID and history ID. */
@@ -1299,34 +1273,6 @@ export type QueryApiArgs = {
   appid?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type RequestBodyConstraint = {
-  /** The field to replace. */
-  jsonPath: Scalars['String']['input'];
-  /** The maximum value of the date. */
-  maxDate?: InputMaybe<Scalars['String']['input']>;
-  /** The maximum length of the string. */
-  maxLength?: InputMaybe<Scalars['Int']['input']>;
-  /** The maximum value of the number. */
-  maxValue?: InputMaybe<Scalars['Int']['input']>;
-  /** The minimum value of the date. */
-  minDate?: InputMaybe<Scalars['String']['input']>;
-  /** The minimum length of the string. */
-  minLength?: InputMaybe<Scalars['Int']['input']>;
-  /** The minimum value of the number. */
-  minValue?: InputMaybe<Scalars['Int']['input']>;
-  /** The pattern to match the string. */
-  pattern?: InputMaybe<Scalars['String']['input']>;
-  /** The values the string can be. */
-  stringValues?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type RequestBodyKeyReplacement = {
-  /** The field to replace. */
-  jsonPath: Scalars['String']['input'];
-  /** The replacement key. */
-  newKey: Scalars['String']['input'];
-};
-
 /** Represents location details retrieved using latitude and longitude. */
 export type Reverse = {
   __typename?: 'Reverse';
@@ -1618,16 +1564,6 @@ export type TriggersStartEnd = {
   amount: Scalars['Int']['output'];
   /** The time period expression, such as exact, before, or after. */
   expression: TimePeriodExpression;
-};
-
-export type UnionResolverCondition = {
-  /** The value to compare. */
-  arrayLength?: InputMaybe<Scalars['Int']['input']>;
-  /** The value to compare. */
-  equals?: InputMaybe<Scalars['JSON']['input']>;
-  /** The JSON path to the field to compare. */
-  jsonPath: Scalars['String']['input'];
-  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum Units {

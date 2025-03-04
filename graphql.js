@@ -527,26 +527,6 @@
  */
 
 /**
- * @typedef {Object} GurafuHeader
- * @property {string} name
- * @property {string} value
- */
-
-/**
- * @typedef {("DELETE"|"GET"|"POST"|"PUT")} GurafuPathMethod
- */
-
-/**
- * @typedef {("BASIC"|"MEGA"|"PRO"|"ULTRA")} GurafuPlan
- */
-
-/**
- * @typedef {Object} GurafuResolverInput
- * @property {string} abstractTypeName - The name of the interface or union type.
- * @property {Array<UnionResolverCondition>} conditions - The conditions to resolve the type.
- */
-
-/**
  * @typedef {Object} HistoryQuery
  * @property {Trigger} [get] - Fetch a specific trigger history event using the trigger ID and history ID.
  * @property {Array<(Trigger|null|undefined)>} [list] - Fetch a list of past trigger events associated with a specific trigger ID.
@@ -585,12 +565,10 @@
  */
 
 /**
- * The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
  * @typedef {*} JSON
  */
 
 /**
- * The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
  * @typedef {*} JSONObject
  */
 
@@ -887,25 +865,6 @@
  */
 
 /**
- * @typedef {Object} RequestBodyConstraint
- * @property {string} jsonPath - The field to replace.
- * @property {string} [maxDate] - The maximum value of the date.
- * @property {number} [maxLength] - The maximum length of the string.
- * @property {number} [maxValue] - The maximum value of the number.
- * @property {string} [minDate] - The minimum value of the date.
- * @property {number} [minLength] - The minimum length of the string.
- * @property {number} [minValue] - The minimum value of the number.
- * @property {string} [pattern] - The pattern to match the string.
- * @property {Array<(string|null|undefined)>} [stringValues] - The values the string can be.
- */
-
-/**
- * @typedef {Object} RequestBodyKeyReplacement
- * @property {string} jsonPath - The field to replace.
- * @property {string} newKey - The replacement key.
- */
-
-/**
  * Represents location details retrieved using latitude and longitude.
  * @typedef {Object} Reverse
  * @property {string} [country] - Country code in ISO 3166 format.
@@ -1108,14 +1067,6 @@
  * @typedef {Object} TriggersStartEnd
  * @property {number} amount - The amount of time (in the specified units) for the time period.
  * @property {TimePeriodExpression} expression - The time period expression, such as exact, before, or after.
- */
-
-/**
- * @typedef {Object} UnionResolverCondition
- * @property {number} [arrayLength] - The value to compare.
- * @property {JSON} [equals] - The value to compare.
- * @property {string} jsonPath - The JSON path to the field to compare.
- * @property {string} [type]
  */
 
 /**
