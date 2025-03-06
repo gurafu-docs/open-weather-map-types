@@ -23,7 +23,7 @@
 	"bugs": {
 		"url": "https://github.com/gurafu-docs/open-weather-map-types/issues"
 	},
-	"homepage": "https://rapidapi.com/gurafu/api/open-weather-map-graphql",
+	"homepage": "https://www.gurafu.io",
 	"publishConfig": {
 		"access": "public"
 	},
