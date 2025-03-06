@@ -967,6 +967,7 @@ export type LocalNames = {
   ca?: Maybe<Scalars['String']['output']>;
   ce?: Maybe<Scalars['String']['output']>;
   co?: Maybe<Scalars['String']['output']>;
+  cr?: Maybe<Scalars['String']['output']>;
   cs?: Maybe<Scalars['String']['output']>;
   cu?: Maybe<Scalars['String']['output']>;
   cv?: Maybe<Scalars['String']['output']>;
@@ -1009,6 +1010,7 @@ export type LocalNames = {
   io?: Maybe<Scalars['String']['output']>;
   is?: Maybe<Scalars['String']['output']>;
   it?: Maybe<Scalars['String']['output']>;
+  iu?: Maybe<Scalars['String']['output']>;
   ja?: Maybe<Scalars['String']['output']>;
   jv?: Maybe<Scalars['String']['output']>;
   ka?: Maybe<Scalars['String']['output']>;
@@ -1045,6 +1047,7 @@ export type LocalNames = {
   nv?: Maybe<Scalars['String']['output']>;
   ny?: Maybe<Scalars['String']['output']>;
   oc?: Maybe<Scalars['String']['output']>;
+  oj?: Maybe<Scalars['String']['output']>;
   om?: Maybe<Scalars['String']['output']>;
   or?: Maybe<Scalars['String']['output']>;
   os?: Maybe<Scalars['String']['output']>;
